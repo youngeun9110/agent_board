@@ -60,10 +60,16 @@ public class PostService {
                 continue;
             }
             Post post = found.get();
+            String newTitle = post.getTitle().replace(before, after);
+            String newContent = post.getContent().replace(before, after);
+            // 검색은 대소문자 무시, 치환은 구분하므로 실제로 바뀐 글만 저장/집계
+            if (newTitle.equals(post.getTitle()) && newContent.equals(post.getContent())) {
+                continue;
+            }
             Post form = new Post();
-            form.setTitle(post.getTitle().replace(before, after));
+            form.setTitle(newTitle);
             form.setName(post.getName());
-            form.setContent(post.getContent().replace(before, after));
+            form.setContent(newContent);
             update(id, form);
             changed++;
         }
